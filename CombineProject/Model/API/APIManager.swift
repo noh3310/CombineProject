@@ -10,7 +10,7 @@ import Alamofire
 
 class APIManager {
     
-    func searchRepositorys(p: String) {
+    func searchRepositorys(p: String, completion: @escaping (Repositorys) -> Void) {
         let parameters = [
             "q": p,
             "per_page": "30",
@@ -30,6 +30,7 @@ class APIManager {
                         let repoData = try JSONDecoder().decode(Repositorys.self, from: data)
                         
                         print(repoData)
+                        completion(repoData)
                     } else {
                         print("no data")
                     }
