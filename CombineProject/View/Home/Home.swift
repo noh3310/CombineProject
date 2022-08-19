@@ -9,7 +9,8 @@ import SwiftUI
 
 struct Home: View {
     
-    @State private var searchText = ""
+    @State var searchText = ""
+    let apiManager = APIManager()
     
     var body: some View {
         if #available(iOS 15.0, *) {
@@ -17,6 +18,11 @@ struct Home: View {
                 HomeView()
                     .navigationTitle("Search")
                     .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        Button("검색") {
+                            apiManager.searchRepositorys(p: "hihi")
+                        }
+                    }
             }
             .searchable(text: $searchText)
         } else {
