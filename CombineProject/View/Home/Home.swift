@@ -41,6 +41,8 @@ struct HomeView: View {
             }
             List(viewModel.repos, id: \.url) { repo in
                 TableViewCell(title: repo.fullName, bodyText: repo.url)
+                    .background( NavigationLink("", destination: WebView(urlToLoad: repo.url)).opacity(0) )
+                
             }.listStyle(.plain)
         }
     }

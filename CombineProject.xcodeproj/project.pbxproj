@@ -13,6 +13,7 @@
 		D31707A528AFB04F00D28971 /* Repos.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31707A428AFB04F00D28971 /* Repos.swift */; };
 		D31707A728AFB1AF00D28971 /* APIToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31707A628AFB1AF00D28971 /* APIToken.swift */; };
 		D31707AA28AFCFC700D28971 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31707A928AFCFC700D28971 /* ViewModel.swift */; };
+		D390401E28B4B0AD001965F0 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D390401D28B4B0AD001965F0 /* WebView.swift */; };
 		D3A5117128AE418F00A99030 /* CombineProjectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A5117028AE418F00A99030 /* CombineProjectApp.swift */; };
 		D3A5117528AE419100A99030 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3A5117428AE419100A99030 /* Assets.xcassets */; };
 		D3A5117828AE419100A99030 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3A5117728AE419100A99030 /* Preview Assets.xcassets */; };
@@ -27,6 +28,7 @@
 		D31707A428AFB04F00D28971 /* Repos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repos.swift; sourceTree = "<group>"; };
 		D31707A628AFB1AF00D28971 /* APIToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIToken.swift; sourceTree = "<group>"; };
 		D31707A928AFCFC700D28971 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		D390401D28B4B0AD001965F0 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		D3A5116D28AE418F00A99030 /* CombineProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CombineProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3A5117028AE418F00A99030 /* CombineProjectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CombineProjectApp.swift; sourceTree = "<group>"; };
 		D3A5117428AE419100A99030 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -75,6 +77,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		D390401A28B4B027001965F0 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				D390401D28B4B0AD001965F0 /* WebView.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
 		D3A5116428AE418F00A99030 = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +125,7 @@
 		D3A5118428AE47B300A99030 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D390401A28B4B027001965F0 /* WebView */,
 				D3A5118528AE47B700A99030 /* Home */,
 			);
 			path = View;
@@ -207,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3A5118728AE485400A99030 /* TableViewCell.swift in Sources */,
+				D390401E28B4B0AD001965F0 /* WebView.swift in Sources */,
 				D31707AA28AFCFC700D28971 /* ViewModel.swift in Sources */,
 				D31707A328AFA72E00D28971 /* RequestUrl.swift in Sources */,
 				D3A5118928AE5D0800A99030 /* SearchBar.swift in Sources */,
