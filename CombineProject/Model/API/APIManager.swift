@@ -10,11 +10,11 @@ import Alamofire
 
 class APIManager {
     
-    func searchRepositorys(p: String, completion: @escaping (Repositorys) -> Void) {
+    func searchRepositorys(p: String, page: Int, completion: @escaping (Repositorys) -> Void) {
         let parameters = [
             "q": p,
             "per_page": "30",
-            "page": "1"
+            "page": String(page)
         ]
         
         let headers: HTTPHeaders = [

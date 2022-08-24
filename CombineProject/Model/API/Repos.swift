@@ -21,7 +21,14 @@ struct Repositorys: Codable {
 }
 
 // MARK: - Repo
-struct Repo: Codable {
+struct Repo: Codable, Equatable {
+    static func == (lhs: Repo, rhs: Repo) -> Bool {
+        if lhs.fullName == rhs.fullName && lhs.url == rhs.url {
+            return true
+        }
+        return false
+    }
+    
     let fullName: String
     let url: String
     let owner: Owner

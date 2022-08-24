@@ -14,10 +14,18 @@ class ViewModel: ObservableObject {
     
     @Published var searchText = ""
     @Published var repos: [Repo] = []
+    @Published var page = 1
     private var cancellable = Set<AnyCancellable>()
     
     init() {
         bind()
+    }
+}
+
+// MARK: Process Page
+extension ViewModel {
+    func addPage() {
+        page += 1
     }
 }
 
@@ -29,8 +37,27 @@ extension ViewModel {
             .debounce(for: 0.5, scheduler: RunLoop.main)
             .filter({ $0.isEmpty ? false : true })
             .sink { [weak self] text in
-                self?.apiManager.searchRepositorys(p: text, completion: { repositorys in
+                self?.page = 1
+                self?.apiManager.searchRepositorys(p: text, page: 1, completion: { repositorys in
                     self?.repos = repositorys.items
+                })
+            }
+            .store(in: &cancellable)
+        
+        $page
+            .filter({ $0 != 1 })
+            .sink { [weak self] page in
+                self?.apiManager.searchRepositorys(p: self?.searchText ?? "", page: self?.page ?? 1, completion: { repositorys in
+                    if page == 1 {
+                        self?.repos = repositorys.items
+                    } else {
+                        var newRepo = self?.repos
+                        repositorys.items.forEach { repo in
+                            newRepo?.append(repo)
+                        }
+                        self?.repos = newRepo!
+
+                    }
                 })
             }
             .store(in: &cancellable)

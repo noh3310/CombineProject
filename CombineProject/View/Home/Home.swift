@@ -43,7 +43,13 @@ struct HomeView: View {
                 TableViewCell(title: repo.fullName, bodyText: repo.url)
                     .background( NavigationLink("", destination: WebView(urlToLoad: repo.url)).opacity(0) )
                 
-            }.listStyle(.plain)
+                    .onAppear {
+                        if ($viewModel.repos.last?.wrappedValue == repo) {
+                            viewModel.addPage()
+                        }
+                    }
+            }
+            .listStyle(.plain)
         }
     }
 }
