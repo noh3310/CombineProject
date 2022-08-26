@@ -22,13 +22,7 @@ struct Repositorys: Codable {
 
 // MARK: - Repo
 struct Repo: Codable, Equatable {
-    static func == (lhs: Repo, rhs: Repo) -> Bool {
-        if lhs.fullName == rhs.fullName && lhs.url == rhs.url {
-            return true
-        }
-        return false
-    }
-    
+    let uuid = UUID()
     let fullName: String
     let url: String
     let owner: Owner
@@ -37,6 +31,13 @@ struct Repo: Codable, Equatable {
         case fullName = "full_name"
         case owner
         case url = "html_url"
+    }
+    
+    static func == (lhs: Repo, rhs: Repo) -> Bool {
+        if lhs.fullName == rhs.fullName && lhs.url == rhs.url {
+            return true
+        }
+        return false
     }
 }
 

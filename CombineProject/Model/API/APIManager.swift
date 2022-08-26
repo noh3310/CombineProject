@@ -7,21 +7,28 @@
 
 import Foundation
 import Alamofire
+import Combine
 
 class APIManager {
     
-    func searchRepositorys(p: String, page: Int, completion: @escaping (Repositorys) -> Void) {
-        let parameters = [
+    private func parameters(_ p: String, _ page: Int) -> [String: String] {
+        return [
             "q": p,
             "per_page": "30",
             "page": String(page)
         ]
-        
-        let headers: HTTPHeaders = [
+    }
+    
+    private var headers: HTTPHeaders {
+        [
             "Accept": "application/vnd.github+json",
             "Authorization": "token \(APIToken.token)"
         ]
-        
+    }
+    
+    func searchRepositorys(p: String, page: Int, completion: @escaping (Repositorys) -> Void) {
+        let parameters = parameters(p, page)
+
         AF.request(RequestUrl.repository.getUrl(), method: .get, parameters: parameters, headers: headers).responseData { (response) in
             switch response.result {
             case .success:
@@ -41,5 +48,14 @@ class APIManager {
                 print("failure")
             }
         }
+    }
+    
+    func searchRepositorysCombine(p: String, page: Int) -> AnyPublisher<Repositorys, AFError> {
+        let parameters = parameters(p, page)
+        
+        return AF.request(RequestUrl.repository.getUrl(), method: .get, parameters: parameters, headers: headers)
+            .publishDecodable(type: Repositorys.self)
+            .value()
+            .eraseToAnyPublisher()
     }
 }

@@ -39,7 +39,7 @@ struct HomeView: View {
                 SearchBar(text: $viewModel.searchText)
                     .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
             }
-            List(viewModel.repos, id: \.url) { repo in
+            List(viewModel.repos, id: \.uuid) { repo in
                 TableViewCell(title: repo.fullName, bodyText: repo.url)
                     .background( NavigationLink("", destination: WebView(urlToLoad: repo.url)).opacity(0) )
                 
