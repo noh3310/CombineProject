@@ -33,41 +33,38 @@ extension ViewModel {
 extension ViewModel {
     func bind() {
         $searchText
-            // Debounce 사용해 입력값이 변경될 때마다 호출하는것 방지
+        // Debounce 사용해 입력값이 변경될 때마다 호출하는것 방지
             .debounce(for: 0.5, scheduler: RunLoop.main)
-            .filter({ $0.isEmpty ? false : true })
-            .sink { [weak self] text in
-                self?.page = 1
-                self?.apiManager.searchRepositorys(p: text, page: 1, completion: { repositorys in
-                    self?.repos = repositorys.items
-                })
+            .filter({ !$0.isEmpty })
+            .flatMap({ self.apiManager.searchRepositorysCombineRepo(p: $0, page: 1) })
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.failureReason ?? "unknown-error")
+                    break
+                }
+            } receiveValue: { [weak self] repo in
+                self?.repos = repo
             }
             .store(in: &cancellable)
         
         $page
             .filter({ $0 != 1 })
-            .sink { [weak self] page in
-                self?.apiManager.searchRepositorys(p: self?.searchText ?? "", page: self?.page ?? 1, completion: { repositorys in
-                    if page == 1 {
-                        self?.repos = repositorys.items
-                    } else {
-                        var newRepo = self?.repos
-                        repositorys.items.forEach { repo in
-                            newRepo?.append(repo)
-                        }
-                        self?.repos = newRepo!
-
-                    }
-                })
-            }
-            .store(in: &cancellable)
-        
-        $repos
-            .sink { repos in
-                repos.forEach { repo in
-                    print(repo)
+            .flatMap({ self.apiManager.searchRepositorysCombineRepo(p: self.searchText, page: $0) })
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.initialError.localizedDescription)
+                    break
                 }
+            } receiveValue: { [weak self] repo in
+                self?.repos = repo
             }
             .store(in: &cancellable)
+
     }
 }
