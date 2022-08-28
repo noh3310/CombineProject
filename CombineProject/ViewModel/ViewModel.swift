@@ -36,27 +36,35 @@ extension ViewModel {
         // Debounce 사용해 입력값이 변경될 때마다 호출하는것 방지
             .debounce(for: 0.5, scheduler: RunLoop.main)
             .filter({ !$0.isEmpty })
-            .flatMap({ self.apiManager.searchRepositorysCombine(p: $0, page: 1) })
-            .sink { error in
-                print("error")
-            } receiveValue: { [weak self] repositorys in
-                self?.repos = repositorys.items
+            .flatMap({ self.apiManager.searchRepositorysCombineRepo(p: $0, page: 1) })
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.failureReason ?? "unknown-error")
+                    break
+                }
+            } receiveValue: { [weak self] repo in
+                self?.repos = repo
             }
             .store(in: &cancellable)
         
         $page
             .filter({ $0 != 1 })
-            .flatMap({ _ in self.apiManager.searchRepositorysCombine(p: self.searchText, page: self.page) })
-            .sink { error in
-                print("error")
-            } receiveValue: { [weak self] repositorys in
-                var newRepo = self?.repos
-                repositorys.items.forEach { repo in
-                    newRepo?.append(repo)
+            .flatMap({ self.apiManager.searchRepositorysCombineRepo(p: self.searchText, page: $0) })
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    break
+                case .failure(let error):
+                    print(error.initialError.localizedDescription)
+                    break
                 }
-                self?.repos = newRepo!
-                
+            } receiveValue: { [weak self] repo in
+                self?.repos = repo
             }
             .store(in: &cancellable)
+
     }
 }

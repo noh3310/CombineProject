@@ -9,6 +9,10 @@ import Foundation
 import Alamofire
 import Combine
 
+struct NetworkError: Error {
+    let initialError: AFError
+}
+
 class APIManager {
     
     private func parameters(_ p: String, _ page: Int) -> [String: String] {
@@ -56,6 +60,21 @@ class APIManager {
         return AF.request(RequestUrl.repository.getUrl(), method: .get, parameters: parameters, headers: headers)
             .publishDecodable(type: Repositorys.self)
             .value()
+            .eraseToAnyPublisher()
+    }
+    
+    func searchRepositorysCombineRepo(p: String, page: Int) -> AnyPublisher<[Repo], NetworkError> {
+        let parameters = parameters(p, page)
+        
+        return AF.request(RequestUrl.repository.getUrl(), method: .get, parameters: parameters, headers: headers)
+            .publishDecodable(type: Repositorys.self)
+            .value()
+            .map({ repositorys in
+                repositorys.items
+            })
+            .mapError({ error in
+                return NetworkError(initialError: error)
+            })
             .eraseToAnyPublisher()
     }
 }
