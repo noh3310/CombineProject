@@ -43,3 +43,23 @@ SwiftUI + Combine을 사용해 Github Repository 검색 리포지토리 구현
             .eraseToAnyPublisher()
     }
     ```
+   - map, mapError 사용해서 return값 변경
+      ```Swift
+      // Error 타입 선언
+      struct NetworkError: Error {
+        let initialError: AFError
+      }
+      
+     func searchRepositorysCombineRepo(p: String, page: Int) -> AnyPublisher<[Repo], NetworkError> {
+        let parameters = parameters(p, page)
+
+        return AF.request(RequestUrl.repository.getUrl(), method: .get, parameters: parameters, headers: headers)
+            .publishDecodable(type: Repositorys.self)
+            .value()
+            .map({ $0.items })  // Output [Repo]로 변경
+            .mapError({ error in  // Failure 타입 
+                return NetworkError(initialError: error)
+            })
+            .eraseToAnyPublisher()
+      }
+      ```
